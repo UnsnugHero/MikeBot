@@ -1,0 +1,12 @@
+{
+  "name": "woahcrafttodomanager",
+  "version": "1.0.0",
+  "description": "Discord bot for managing a server-wide minecraft to-do list",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
