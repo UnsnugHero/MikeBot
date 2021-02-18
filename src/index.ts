@@ -3,8 +3,9 @@ import jsonfile from 'jsonfile';
 
 import 'dotenv/config';
 
-// constants
+// constants/helpers
 import { command, COMMANDS } from './constants';
+import { handleAdd } from './helpers';
 
 // discord
 const client = new Discord.Client();
@@ -28,12 +29,14 @@ client.on('message', (msg: Message) => {
 
   // check for a valid command
   if (COMMANDS.has(cmd)) {
+    // remove unnecessary first element
+    cmdArgs.shift();
+
     // handle various command cases
     switch (cmd) {
       case '!add':
-        // handleAdd()
+        handleAdd(cmdArgs);
         break;
-
       default:
         console.error('Unsupported Command!');
         break;
