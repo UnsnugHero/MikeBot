@@ -1,10 +1,12 @@
-const Discord = require('discord.js');
-const jsonfile = require('jsonfile');
-const dotenv = require('dotenv').config();
+import Discord from 'discord.js';
+import jsonfile from 'jsonfile';
+import 'dotenv/config';
 
 // discord
 const client = new Discord.Client();
 const token = process.env.DISCORD_BOT_TOKEN;
+
+console.log(token);
 
 // valid commands
 // add adds a todo item
