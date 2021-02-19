@@ -46,3 +46,7 @@ export const COMMANDS = new Set<command>([
 // text
 
 export const UNSUPPORTED_COMMAND = 'Unsupported Command!';
+
+// misc
+
+export const TODO_FILE_PATH = 'data/todo.json';

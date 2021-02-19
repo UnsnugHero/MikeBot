@@ -1,11 +1,11 @@
 # Dependency directories
 node_modules/
 
+# local Data
+data/
+
 # Dist Directory
 dist/
 
 # Files
 .env
-
-# Todo File
-todo.json

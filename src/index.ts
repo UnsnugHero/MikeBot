@@ -5,10 +5,14 @@ import 'dotenv/config';
 
 // constants/helpers
 import { command, COMMANDS, UNSUPPORTED_COMMAND } from './constants';
+import { TodoBot } from './bot';
 
 // discord
 const client = new Discord.Client();
 const token = process.env.DISCORD_BOT_TOKEN;
+
+// Todo Bot instance
+const todoBot = new TodoBot();
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -33,7 +37,7 @@ client.on('message', (msg: Message) => {
     // handle various command cases
     switch (cmd) {
       case '!add':
-        // handleAdd(args);
+        todoBot.handleAdd(args);
         break;
       default:
         console.error(UNSUPPORTED_COMMAND);
