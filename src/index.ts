@@ -1,11 +1,10 @@
 import Discord, { Message } from 'discord.js';
-import jsonfile from 'jsonfile';
+import { tail } from 'lodash';
 
 import 'dotenv/config';
 
 // constants/helpers
-import { command, COMMANDS } from './constants';
-import { handleAdd } from './helpers';
+import { command, COMMANDS, UNSUPPORTED_COMMAND } from './constants';
 
 // discord
 const client = new Discord.Client();
@@ -20,25 +19,24 @@ client.on('message', (msg: Message) => {
   const { content } = msg;
 
   // get components of command
-  const cmdArgs = content.split(' ');
+  const cmdWithArgs = content.split(' ');
 
   // return if null or empty
-  if (!cmdArgs || cmdArgs.length === 0) return;
+  if (!cmdWithArgs || cmdWithArgs.length === 0) return;
 
-  const cmd: command = cmdArgs[0] as command;
-
+  const cmd: command = cmdWithArgs[0] as command;
   // check for a valid command
   if (COMMANDS.has(cmd)) {
     // remove unnecessary first element
-    cmdArgs.shift();
+    const args = tail(cmdWithArgs);
 
     // handle various command cases
     switch (cmd) {
       case '!add':
-        handleAdd(cmdArgs);
+        // handleAdd(args);
         break;
       default:
-        console.error('Unsupported Command!');
+        console.error(UNSUPPORTED_COMMAND);
         break;
     }
   }

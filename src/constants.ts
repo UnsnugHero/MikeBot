@@ -19,7 +19,22 @@
  * explanation: add "Mine Iron Ore" to general section
  *
  */
-export type command = '!add' | '!done' | '!section' | '!show' | '!pin';
+export type command =
+  // CRUD commands
+  | '!add'
+  | '!get'
+  | '!update'
+  | '!delete'
+  // other commands
+  | '!done'
+  | '!section'
+  | '!show'
+  | '!pin'
+  | '!init'
+  // admin commands, for ME!
+  | '!approve'
+  | '!veto';
+
 export const COMMANDS = new Set<command>([
   '!add',
   '!done',
@@ -27,3 +42,7 @@ export const COMMANDS = new Set<command>([
   '!show',
   '!pin',
 ]);
+
+// text
+
+export const UNSUPPORTED_COMMAND = 'Unsupported Command!';
