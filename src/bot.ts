@@ -2,6 +2,7 @@ import jsonfile from 'jsonfile';
 
 import { TodoList } from './bot.model';
 import { TODO_FILE_PATH } from './constants';
+import { boldText, underlineText } from './helpers';
 
 export class TodoBot {
   // indicates if an init has been requested
@@ -20,6 +21,36 @@ export class TodoBot {
       }
     });
     this._init = false;
+  }
+
+  /**
+   * Prints the entire Todo list to the chat. Either ignores arguments passed or says this takes no args,
+   * not sure which one to do yet.
+   *
+   * @returns string to return to the user
+   */
+  public printAll(): string {
+    // I couldn't get multline template strings to work ._.
+    const todos = this._todoJson.sections.map((section, sIndex) => {
+      return section.todos
+        .map((todo, tIndex) => `    ${sIndex}.${tIndex} ${todo}`)
+        .join('\n');
+    });
+
+    const sections = this._todoJson.sections
+      .map((section, sIndex) => {
+        return (
+          `${boldText(`${sIndex}. ${section.title}`)}\n\n` +
+          `${todos[sIndex]}` +
+          '\n'
+        );
+      })
+      .join('\n');
+
+    const printAllString =
+      `${underlineText(this._todoJson.title)}\n\n` + sections;
+
+    return printAllString;
   }
 
   /**

@@ -34,15 +34,23 @@ client.on('message', (msg: Message) => {
     // remove unnecessary first element
     const args = tail(cmdWithArgs);
 
+    // string to print back to chat
+    let responseText = '';
+
     // handle various command cases
     switch (cmd) {
       case '!add':
-        todoBot.handleAdd(args);
+        responseText = todoBot.handleAdd(args);
+        break;
+      case '!printall':
+        responseText = todoBot.printAll();
         break;
       default:
         console.error(UNSUPPORTED_COMMAND);
         break;
     }
+
+    if (responseText) msg.channel.send(responseText);
   }
 });
 

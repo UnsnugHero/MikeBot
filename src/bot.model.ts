@@ -7,16 +7,10 @@
  */
 export interface TodoList {
   title: string;
-  section: Section[];
+  sections: Section[];
 }
 
 export interface Section {
-  id: number;
   title: string;
-  todos: TodoItem[];
-}
-
-export interface TodoItem {
-  id: number;
-  content: string;
+  todos: string[];
 }

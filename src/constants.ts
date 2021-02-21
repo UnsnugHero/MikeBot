@@ -28,7 +28,7 @@ export type command =
   // other commands
   | '!done'
   | '!section'
-  | '!show'
+  | '!printall'
   | '!pin'
   | '!init'
   // admin commands, for ME!
@@ -39,7 +39,7 @@ export const COMMANDS = new Set<command>([
   '!add',
   '!done',
   '!section',
-  '!show',
+  '!printall',
   '!pin',
 ]);
 
