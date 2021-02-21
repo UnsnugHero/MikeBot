@@ -2,8 +2,8 @@
  * Describes the structure of the todo list document
  *
  * The document is composed of sections
- * Each section has a title, ID, and a list of todos
- * Each Todo Item has an ID and text content
+ * Each section has a title, and a list of todos
+ * Each Todo Item is a string
  */
 export interface TodoList {
   title: string;

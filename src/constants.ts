@@ -29,19 +29,14 @@ export type command =
   | '!done'
   | '!section'
   | '!printall'
-  | '!pin'
+  | '!pinall'
   | '!init'
   // admin commands, for ME!
   | '!approve'
   | '!veto';
 
-export const COMMANDS = new Set<command>([
-  '!add',
-  '!done',
-  '!section',
-  '!printall',
-  '!pin',
-]);
+// add as I implement
+export const COMMANDS = new Set<command>(['!printall', '!pinall']);
 
 // text
 

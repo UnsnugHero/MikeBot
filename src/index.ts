@@ -42,9 +42,18 @@ client.on('message', (msg: Message) => {
       case '!add':
         responseText = todoBot.handleAdd(args);
         break;
+
+      case '!pinall':
+        msg.channel
+          .send(todoBot.printAll())
+          .then((sentMsg) => sentMsg.pin())
+          .catch((error) => console.log(error));
+        break;
+
       case '!printall':
         responseText = todoBot.printAll();
         break;
+
       default:
         console.error(UNSUPPORTED_COMMAND);
         break;

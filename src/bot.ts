@@ -5,8 +5,6 @@ import { TODO_FILE_PATH } from './constants';
 import { boldText, underlineText } from './helpers';
 
 export class TodoBot {
-  // indicates if an init has been requested
-  private _init: boolean;
   // holds the curent value of the todo json
   private _todoJson: TodoList;
 
@@ -20,21 +18,23 @@ export class TodoBot {
         process.exit();
       }
     });
-    this._init = false;
   }
 
   /**
    * Prints the entire Todo list to the chat. Either ignores arguments passed or says this takes no args,
    * not sure which one to do yet.
    *
-   * @returns string to return to the user
+   * @returns string representing entire todo list
    */
   public printAll(): string {
     // I couldn't get multline template strings to work ._.
     const todos = this._todoJson.sections.map((section, sIndex) => {
-      return section.todos
-        .map((todo, tIndex) => `    ${sIndex}.${tIndex} ${todo}`)
-        .join('\n');
+      return (
+        section.todos
+          // adding spaces since discord doesn't like tabs
+          .map((todo, tIndex) => `    ${sIndex}.${tIndex} ${todo}`)
+          .join('\n')
+      );
     });
 
     const sections = this._todoJson.sections
@@ -52,6 +52,11 @@ export class TodoBot {
 
     return printAllString;
   }
+
+  /**
+   * Pins the
+   *
+   */
 
   /**
    * Adds a Todo item to a section or the general section if no section is specified
