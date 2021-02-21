@@ -14,6 +14,35 @@ const token = process.env.DISCORD_BOT_TOKEN;
 // Todo Bot instance
 const todoBot = new TodoBot();
 
+// function map
+const commandRunner = (
+  msg: Message,
+  cmd: command,
+  cmdWithArgs: string[]
+): void => {
+  // command function to execute
+  let commandFn;
+
+  // our switch statement
+  const commands: { [key in command]: any } = {
+    '!pinall': () => todoBot.pinAll(msg),
+    '!printall': () => todoBot.printAll(msg),
+  };
+
+  if (commands[cmd]) {
+    commandFn = commands[cmd];
+  } else {
+    // the command doesn't exist
+    commandFn = () => UNSUPPORTED_COMMAND;
+  }
+
+  commandFn();
+};
+
+/*******************************
+ * DISCORD
+ ******************************/
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -34,32 +63,8 @@ client.on('message', (msg: Message) => {
     // remove unnecessary first element
     const args = tail(cmdWithArgs);
 
-    // string to print back to chat
-    let responseText = '';
-
     // handle various command cases
-    switch (cmd) {
-      case '!add':
-        responseText = todoBot.handleAdd(args);
-        break;
-
-      case '!pinall':
-        msg.channel
-          .send(todoBot.printAll())
-          .then((sentMsg) => sentMsg.pin())
-          .catch((error) => console.log(error));
-        break;
-
-      case '!printall':
-        responseText = todoBot.printAll();
-        break;
-
-      default:
-        console.error(UNSUPPORTED_COMMAND);
-        break;
-    }
-
-    if (responseText) msg.channel.send(responseText);
+    commandRunner(msg, cmd, cmdWithArgs);
   }
 });
 

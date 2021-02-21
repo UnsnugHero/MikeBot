@@ -21,19 +21,18 @@
  */
 export type command =
   // CRUD commands
-  | '!add'
-  | '!get'
-  | '!update'
-  | '!delete'
+  // | '!add'
+  // | '!addsection'
+  // | '!get'
+  // | '!update'
+  // | '!delete'
   // other commands
-  | '!done'
-  | '!section'
-  | '!printall'
-  | '!pinall'
-  | '!init'
-  // admin commands, for ME!
-  | '!approve'
-  | '!veto';
+  // | '!done'
+  '!printall' | '!pinall';
+// | '!init'
+// admin commands, for ME!
+// | '!approve'
+// | '!veto';
 
 // add as I implement
 export const COMMANDS = new Set<command>(['!printall', '!pinall']);

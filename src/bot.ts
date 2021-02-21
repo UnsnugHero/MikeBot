@@ -1,8 +1,9 @@
+import { Message } from 'discord.js';
 import jsonfile from 'jsonfile';
 
 import { TodoList } from './bot.model';
 import { TODO_FILE_PATH } from './constants';
-import { boldText, underlineText } from './helpers';
+import { formatTodoJson } from './helpers';
 
 export class TodoBot {
   // holds the curent value of the todo json
@@ -24,45 +25,36 @@ export class TodoBot {
    * Prints the entire Todo list to the chat. Either ignores arguments passed or says this takes no args,
    * not sure which one to do yet.
    *
-   * @returns string representing entire todo list
+   * @param msg originating message of command
    */
-  public printAll(): string {
-    // I couldn't get multline template strings to work ._.
-    const todos = this._todoJson.sections.map((section, sIndex) => {
-      return (
-        section.todos
-          // adding spaces since discord doesn't like tabs
-          .map((todo, tIndex) => `    ${sIndex}.${tIndex} ${todo}`)
-          .join('\n')
-      );
+  public printAll(msg: Message) {
+    const formattedTodo = formatTodoJson(this._todoJson);
+    return msg.channel.send(formattedTodo).catch((error) => {
+      msg.channel.send('Uh oh! I had a problem printing the Todo list.');
+      console.log(error);
     });
-
-    const sections = this._todoJson.sections
-      .map((section, sIndex) => {
-        return (
-          `${boldText(`${sIndex}. ${section.title}`)}\n\n` +
-          `${todos[sIndex]}` +
-          '\n'
-        );
-      })
-      .join('\n');
-
-    const printAllString =
-      `${underlineText(this._todoJson.title)}\n\n` + sections;
-
-    return printAllString;
   }
 
   /**
-   * Pins the
+   * Pins the entire todo list to the chat
    *
+   * @param msg originating message of command
    */
+  public pinAll(msg: Message) {
+    const formattedTodo = formatTodoJson(this._todoJson);
+    return msg.channel
+      .send(formattedTodo)
+      .then((sentMsg) => sentMsg.pin())
+      .catch((error) => {
+        msg.channel.send('Uh oh! I could not pin that message.');
+        console.log(error);
+      });
+  }
 
   /**
    * Adds a Todo item to a section or the general section if no section is specified
    *
    * @param cmdArgs components of a command minus the initial command
-   * @returns string to return to the user
    */
   public handleAdd(cmdArgs: string[]): string {
     // check if empty to handle error, send message saying command shouldn't be empty
