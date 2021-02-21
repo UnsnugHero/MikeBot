@@ -15,11 +15,7 @@ const token = process.env.DISCORD_BOT_TOKEN;
 const todoBot = new TodoBot();
 
 // function map
-const commandRunner = (
-  msg: Message,
-  cmd: command,
-  cmdWithArgs: string[]
-): void => {
+const commandRunner = (msg: Message, cmd: command, cmdWithArgs: string[]) => {
   // command function to execute
   let commandFn;
 
