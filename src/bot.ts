@@ -23,6 +23,16 @@ export class TodoBot {
   }
 
   /**
+   * Adds a new section to the Todo JSON
+   *
+   * @param msg
+   * @returns promise representing success of command
+   */
+  public addSection(msg: Message): Promise<CommandStatus> {
+    return new Promise(() => console.log(this._todoJson));
+  }
+
+  /**
    * Prints the entire Todo list to the chat. Either ignores arguments passed or says this takes no args,
    * not sure which one to do yet.
    *
@@ -59,8 +69,8 @@ export class TodoBot {
     }
 
     // missing pin permission
-    return new Promise(() =>
-      buildCommandStatus(false, STRINGS['PIN_ALL_PERMISSION'])
+    return new Promise((resolve, reject) =>
+      reject(buildCommandStatus(false, STRINGS['PIN_ALL_PERMISSION']))
     );
   }
 
