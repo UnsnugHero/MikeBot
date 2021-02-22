@@ -1,5 +1,9 @@
-import { TodoList } from './bot.model';
+import { Message } from 'discord.js';
+import { CommandStatus, TodoList } from './bot.model';
 
+/**********************
+ * Text Formatters
+ *********************/
 export const italicizeText = (text: string): string => {
   return `*${text}*`;
 };
@@ -10,6 +14,18 @@ export const boldText = (text: string): string => {
 
 export const underlineText = (text: string): string => {
   return `__${text}__`;
+};
+
+export const buildCommandStatus = (
+  success: boolean,
+  description: string,
+  error?: Message
+): CommandStatus => {
+  return {
+    success,
+    description,
+    ...(error ? { error } : {}),
+  };
 };
 
 /**

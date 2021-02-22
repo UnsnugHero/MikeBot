@@ -1,9 +1,10 @@
 import { Message } from 'discord.js';
 import jsonfile from 'jsonfile';
 
-import { TodoList } from './bot.model';
+import { CommandStatus, TodoList } from './bot.model';
 import { TODO_FILE_PATH } from './constants';
-import { formatTodoJson } from './helpers';
+import { STRINGS } from './strings.constants';
+import { buildCommandStatus, formatTodoJson } from './helpers';
 
 export class TodoBot {
   // holds the curent value of the todo json
@@ -26,29 +27,41 @@ export class TodoBot {
    * not sure which one to do yet.
    *
    * @param msg originating message of command
+   * @returns promise representing success of command
    */
-  public printAll(msg: Message) {
+  public printAll(msg: Message): Promise<CommandStatus> {
     const formattedTodo = formatTodoJson(this._todoJson);
-    return msg.channel.send(formattedTodo).catch((error) => {
-      msg.channel.send('Uh oh! I had a problem printing the Todo list.');
-      console.log(error);
-    });
+    return msg.channel
+      .send(formattedTodo)
+      .then(() => buildCommandStatus(true, STRINGS['PRINT_ALL_SUCCESS']))
+      .catch((error) =>
+        buildCommandStatus(false, STRINGS['PRINT_ALL_ERROR'], error)
+      );
   }
 
   /**
    * Pins the entire todo list to the chat
    *
    * @param msg originating message of command
+   * @returns promise representing success of command
    */
-  public pinAll(msg: Message) {
-    const formattedTodo = formatTodoJson(this._todoJson);
-    return msg.channel
-      .send(formattedTodo)
-      .then((sentMsg) => sentMsg.pin())
-      .catch((error) => {
-        msg.channel.send('Uh oh! I could not pin that message.');
-        console.log(error);
-      });
+  public pinAll(msg: Message): Promise<CommandStatus> {
+    // is this how to handle a missing pinnable permission?
+    if (msg.pinnable) {
+      const formattedTodo = formatTodoJson(this._todoJson);
+      const sendMsgPromise = msg.channel.send(formattedTodo);
+      const pinPromise = sendMsgPromise.then((sentMsg) => sentMsg.pin());
+      return Promise.all([sendMsgPromise, pinPromise])
+        .then(() => buildCommandStatus(true, STRINGS['PIN_ALL_SUCCESS']))
+        .catch((error) => {
+          return buildCommandStatus(false, STRINGS['PIN_ALL_ERROR'], error);
+        });
+    }
+
+    // missing pin permission
+    return new Promise(() =>
+      buildCommandStatus(false, STRINGS['PIN_ALL_PERMISSION'])
+    );
   }
 
   /**

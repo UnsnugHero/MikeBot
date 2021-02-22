@@ -4,8 +4,9 @@ import { tail } from 'lodash';
 import 'dotenv/config';
 
 // constants/helpers
-import { command, COMMANDS, UNSUPPORTED_COMMAND } from './constants';
+import { COMMANDS, UNSUPPORTED_COMMAND } from './constants';
 import { TodoBot } from './bot';
+import { command, CommandStatus } from './bot.model';
 
 // discord
 const client = new Discord.Client();
@@ -20,7 +21,11 @@ const commandRunner = (msg: Message, cmd: command, cmdWithArgs: string[]) => {
   let commandFn;
 
   // our switch statement
-  const commands: { [key in command]: any } = {
+  const commands: { [key in command] } = {
+    // CRUD
+
+    '!addsection': () => console.log('todoBot.addSection(msg, cmdWithArgs)'),
+    // printing
     '!pinall': () => todoBot.pinAll(msg),
     '!printall': () => todoBot.printAll(msg),
   };
@@ -32,7 +37,12 @@ const commandRunner = (msg: Message, cmd: command, cmdWithArgs: string[]) => {
     commandFn = () => UNSUPPORTED_COMMAND;
   }
 
-  commandFn();
+  const cmdPromise = commandFn();
+  cmdPromise.then(console.log).catch((error: CommandStatus) => {
+    console.log(error);
+    // if there's a no write permission error then this won't work... lol
+    msg.channel.send(error.description);
+  });
 };
 
 /*******************************
