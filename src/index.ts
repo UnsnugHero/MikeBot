@@ -4,7 +4,7 @@ import { tail } from 'lodash';
 import 'dotenv/config';
 
 // constants/helpers
-import { COMMANDS, UNSUPPORTED_COMMAND } from './constants';
+import { COMMANDS, UNSUPPORTED_COMMAND, TODO_FILE_PATH } from './constants';
 import { TodoBot } from './bot';
 import { command, CommandStatus } from './bot.model';
 
@@ -13,18 +13,17 @@ const client = new Discord.Client();
 const token = process.env.DISCORD_BOT_TOKEN;
 
 // Todo Bot instance
-const todoBot = new TodoBot();
+const todoBot = new TodoBot(TODO_FILE_PATH);
 
 // function map
-const commandRunner = (msg: Message, cmd: command, cmdWithArgs: string[]) => {
+const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   // command function to execute
   let commandFn;
 
   // our switch statement
   const commands: { [key in command] } = {
     // CRUD
-
-    '!addsection': () => console.log('todoBot.addSection(msg, cmdWithArgs)'),
+    '!addsection': () => todoBot.addSection(msg, args),
     // printing
     '!pinall': () => todoBot.pinAll(msg),
     '!printall': () => todoBot.printAll(msg),
@@ -70,7 +69,7 @@ client.on('message', (msg: Message) => {
     const args = tail(cmdWithArgs);
 
     // handle various command cases
-    commandRunner(msg, cmd, cmdWithArgs);
+    commandRunner(msg, cmd, args);
   }
 });
 
