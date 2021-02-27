@@ -25,6 +25,7 @@ export type command =
   // CRUD commands
   // | '!add'
   | '!addsection'
+  | '!removesection'
   // | '!get'
   // | '!update'
   // | '!delete'

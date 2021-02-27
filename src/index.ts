@@ -24,6 +24,7 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   const commands: { [key in command] } = {
     // CRUD
     '!addsection': () => todoBot.addSection(msg, args),
+    '!removesection': () => todoBot.removeSection(msg, args),
     // printing
     '!pinall': () => todoBot.pinAll(msg),
     '!printall': () => todoBot.printAll(msg),

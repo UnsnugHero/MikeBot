@@ -2,6 +2,17 @@ import { Message } from 'discord.js';
 import { CommandStatus, TodoList } from './bot.model';
 
 /**********************
+ * Numbers
+ *********************/
+
+export const isPositiveInteger = (num: number): boolean => {
+  if (typeof num !== 'number') return false; // assert number
+  if (!Number.isInteger(num)) return false; // assert integer (should be int since did parse int but why not)
+  if (num < 0) return false; // assert positive
+  return true;
+};
+
+/**********************
  * Text Formatters
  *********************/
 export const italicizeText = (text: string): string => {

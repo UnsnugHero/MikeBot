@@ -3,7 +3,11 @@ import jsonfile from 'jsonfile';
 
 import { CommandStatus, Section, TodoList } from './bot.model';
 import { STRINGS } from './strings.constants';
-import { buildCommandStatus, formatTodoJson } from './helpers';
+import {
+  buildCommandStatus,
+  formatTodoJson,
+  isPositiveInteger,
+} from './helpers';
 
 export class TodoBot {
   // path of json file to write
@@ -36,10 +40,8 @@ export class TodoBot {
   public addSection(msg: Message, args: string[]): Promise<CommandStatus> {
     // command must have a section title argument
     if (!args.length) {
-      return new Promise((resolve, reject) =>
-        reject(
-          buildCommandStatus(false, 'Please specify a title for the section.')
-        )
+      return this._buildCommandRejection(
+        'Please specify a title for the section.'
       );
     }
 
@@ -65,7 +67,6 @@ export class TodoBot {
         .writeFile(this._filePath, newTodoJson)
         .then(() => {
           const successMsg = `New section ${sectionTitle} successfully added!`;
-          // this could trigger catch, edge case ...
           return buildCommandStatus(true, successMsg);
         })
         .catch((error) => {
@@ -75,12 +76,67 @@ export class TodoBot {
         })
         // want to send success message, but don't want it to possibly tip off
         // the catch error which would revert the class todoJson when it shouldn't
+        // could still mess up the error message but whatever
         .then((result: CommandStatus) => {
           if (result.success) msg.channel.send(result.description);
-
           return result;
         })
     );
+  }
+
+  /**
+   * Removes a section by Id
+   * @param msg incoming message
+   * @param args command arguments
+   */
+  public removeSection(msg: Message, args: string[]): Promise<CommandStatus> {
+    // check if index arg is present
+    if (!args.length)
+      return this._buildCommandRejection(
+        'Please specify a section index to delete.'
+      );
+
+    const index = parseInt(args[0]);
+    // check if index can access an array
+    if (!isPositiveInteger(index))
+      return this._buildCommandRejection(
+        'Please provide a positive integer value.'
+      );
+
+    // check index is not out of bounds
+    if (index > this._todoJson.sections.length - 1)
+      return this._buildCommandRejection(
+        'Index does not match an existing section.'
+      );
+
+    // get section name for message confirmation
+    const sectionToRemove = this._todoJson.sections[index].title;
+
+    // get sections without removed one while preserving
+    const newSections = this._todoJson.sections.filter((_, i) => index !== i);
+
+    const newTodoJson: TodoList = {
+      title: this._todoJson.title,
+      sections: newSections,
+    };
+
+    // update the class todo json value
+    this._updateTodoJson(newTodoJson);
+
+    return jsonfile
+      .writeFile(this._filePath, newTodoJson)
+      .then(() => {
+        const successMsg = `Section ${sectionToRemove} successfully removed.`;
+        return buildCommandStatus(true, successMsg);
+      })
+      .catch((error) => {
+        this._todoJson = this._todoJsonPrevious;
+        return buildCommandStatus(false, 'Error removing section.', error);
+      })
+      .then((result: CommandStatus) => {
+        if (result.success) msg.channel.send(result.description);
+        return result;
+      });
   }
 
   /**
@@ -151,5 +207,12 @@ export class TodoBot {
   private _updateTodoJson(newValue: TodoList) {
     this._todoJsonPrevious = this._todoJson;
     this._todoJson = newValue;
+  }
+
+  // builds a promise rejection tailored for commands
+  private _buildCommandRejection(errMsg: string): Promise<CommandStatus> {
+    return new Promise((_, reject) =>
+      reject(buildCommandStatus(false, errMsg))
+    );
   }
 }

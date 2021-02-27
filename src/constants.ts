@@ -3,6 +3,7 @@ import { command } from './bot.model';
 // add as I implement
 export const COMMANDS = new Set<command>([
   '!addsection',
+  '!removesection',
   '!printall',
   '!pinall',
 ]);
