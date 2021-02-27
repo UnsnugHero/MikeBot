@@ -23,7 +23,8 @@ import { Message } from 'discord.js';
  */
 export type command =
   // CRUD commands
-  // | '!add'
+  | '!addtodo'
+  // | '!removetodo'
   | '!addsection'
   | '!removesection'
   // | '!get'
@@ -62,6 +63,7 @@ export interface Section {
  */
 export interface CommandStatus {
   success: boolean;
+  writeAttempt: boolean;
   description: string;
   error?: Message;
 }

@@ -23,6 +23,7 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   // our switch statement
   const commands: { [key in command] } = {
     // CRUD
+    '!addtodo': () => todoBot.addTodo(msg, args),
     '!addsection': () => todoBot.addSection(msg, args),
     '!removesection': () => todoBot.removeSection(msg, args),
     // printing
@@ -38,11 +39,15 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   }
 
   const cmdPromise = commandFn();
-  cmdPromise.then(console.log).catch((error: CommandStatus) => {
-    console.log(error);
-    // if there's a no write permission error then this won't work... lol
-    msg.channel.send(error.description);
-  });
+  cmdPromise
+    .then((response: CommandStatus) => {
+      console.log(response);
+      if (response.writeAttempt) msg.channel.send(response.description);
+    })
+    .catch((error: CommandStatus) => {
+      console.log(error);
+      msg.channel.send(error.description);
+    });
 };
 
 /*******************************

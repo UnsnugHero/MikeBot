@@ -30,10 +30,12 @@ export const underlineText = (text: string): string => {
 export const buildCommandStatus = (
   success: boolean,
   description: string,
+  writeAttempt = false,
   error?: Message
 ): CommandStatus => {
   return {
     success,
+    writeAttempt,
     description,
     ...(error ? { error } : {}),
   };

@@ -34,7 +34,8 @@ export class TodoBot {
   /**
    * Adds a new section to the Todo JSON
    *
-   * @param msg
+   * @param msg incoming message
+   * @param args command arguments
    * @returns promise representing success of command
    */
   public addSection(msg: Message, args: string[]): Promise<CommandStatus> {
@@ -60,32 +61,16 @@ export class TodoBot {
     // update the class todo json value
     this._updateTodoJson(newTodoJson);
 
-    return (
-      jsonfile
-        .writeFile(this._filePath, newTodoJson)
-        .then(() => {
-          const successMsg = getText('ADD_SECTION_SUCCESS', { sectionTitle });
-          return buildCommandStatus(true, successMsg);
-        })
-        .catch((error) => {
-          // revert class todo json
-          this._todoJson = this._todoJsonPrevious;
-          return buildCommandStatus(false, getText('ADD_SECTION_ERROR'), error);
-        })
-        // want to send success message, but don't want it to possibly tip off
-        // the catch error which would revert the class todoJson when it shouldn't
-        // could still mess up the error message but whatever
-        .then((result: CommandStatus) => {
-          if (result.success) msg.channel.send(result.description);
-          return result;
-        })
-    );
+    const successMsg = getText('ADD_SECTION_SUCCESS', { sectionTitle });
+    const errorMsg = getText('ADD_SECTION_ERROR');
+    return this._attemptWrite(newTodoJson, successMsg, errorMsg);
   }
 
   /**
    * Removes a section by Id
    * @param msg incoming message
    * @param args command arguments
+   * @returns promise representing success of command
    */
   public removeSection(msg: Message, args: string[]): Promise<CommandStatus> {
     // check if index arg is present
@@ -94,51 +79,68 @@ export class TodoBot {
         getText('REMOVE_SECTION_MISSING_INDEX')
       );
 
-    const index = Number(args[0]);
+    const sectionIndex = Number(args[0]);
     // check if index can access an array
-    if (!isPositiveInteger(index))
-      return this._buildCommandRejection(
-        getText('REMOVE_SECTION_MISSING_POS_INT')
-      );
+    if (!isPositiveInteger(sectionIndex))
+      return this._buildCommandRejection(getText('NON_POSITIVE_INT_INDEX'));
 
     // check index is not out of bounds
-    if (index > this._todoJson.sections.length - 1)
-      return this._buildCommandRejection(getText('REMOVE_SECTION_BAD_INDEX'));
+    if (sectionIndex > this._todoJson.sections.length - 1)
+      return this._buildCommandRejection(getText('NO_MATCHING_SECTION_INDEX'));
 
     // get section name for message confirmation
-    const sectionToRemove = this._todoJson.sections[index].title;
+    const sectionToRemove = this._todoJson.sections[sectionIndex].title;
 
     // get sections without removed one while preserving
-    const newSections = this._todoJson.sections.filter((_, i) => index !== i);
+    const newSections = this._todoJson.sections.filter(
+      (_, i) => sectionIndex !== i
+    );
 
     const newTodoJson: TodoList = {
       title: this._todoJson.title,
       sections: newSections,
     };
 
-    // update the class todo json value
-    this._updateTodoJson(newTodoJson);
+    const successMsg = getText('REMOVE_SECTION_SUCCESS', {
+      sectionToRemove,
+    });
+    const errorMsg = getText('REMOVE_SECTION_ERROR');
+    return this._attemptWrite(newTodoJson, successMsg, errorMsg);
+  }
 
-    return jsonfile
-      .writeFile(this._filePath, newTodoJson)
-      .then(() => {
-        const successMsg = getText('REMOVE_SECTION_SUCCESS', {
-          sectionToRemove,
-        });
-        return buildCommandStatus(true, successMsg);
-      })
-      .catch((error) => {
-        this._todoJson = this._todoJsonPrevious;
-        return buildCommandStatus(
-          false,
-          getText('REMOVE_SECTION_ERROR'),
-          error
-        );
-      })
-      .then((result: CommandStatus) => {
-        if (result.success) msg.channel.send(result.description);
-        return result;
-      });
+  /**
+   * Adds a Todo item to a section or the first section if no section is specified
+   *
+   * @param msg incoming message
+   * @param args command arguments
+   * @returns promise representing success of command
+   */
+  public addTodo(msg: Message, args: string[]): Promise<CommandStatus> {
+    // need at least section index and content, so at least two arguments
+    if (args.length < 2)
+      return this._buildCommandRejection(getText('ADD_TODO_INCORRECT_ARGS'));
+
+    const sectionIndex = Number(args[0]);
+    if (!isPositiveInteger(sectionIndex))
+      return this._buildCommandRejection(getText('NON_POSITIVE_INT_INDEX'));
+
+    if (sectionIndex > this._todoJson.sections.length - 1)
+      return this._buildCommandRejection(getText('NO_MATCHING_SECTION_INDEX'));
+
+    const argsWithoutSectionIndex = args.slice(1);
+    const todoConent = argsWithoutSectionIndex.join(' ');
+
+    // add todo to the indexed section's todos
+    const newTodoJson = { ...this._todoJson };
+    newTodoJson.sections[sectionIndex].todos = [
+      ...newTodoJson.sections[sectionIndex].todos,
+      todoConent,
+    ];
+
+    const sectionTitle = this._todoJson.sections[sectionIndex].title;
+    const successMsg = getText('ADD_TODO_SUCCESS', { sectionTitle });
+    const errorMsg = getText('ADD_TODO_ERROR');
+    return this._attemptWrite(newTodoJson, successMsg, errorMsg);
   }
 
   /**
@@ -183,26 +185,6 @@ export class TodoBot {
     );
   }
 
-  /**
-   * Adds a Todo item to a section or the general section if no section is specified
-   *
-   * @param cmdArgs components of a command minus the initial command
-   */
-  public handleAdd(cmdArgs: string[]): string {
-    // check if empty to handle error, send message saying command shouldn't be empty
-    if (cmdArgs.length === 0) {
-      //handle error here
-      return 'Say something about using !add correctly';
-    }
-
-    let section = '';
-
-    // check if command specified a section
-    if (cmdArgs[0].charAt[0] === '#') {
-      section = cmdArgs[0];
-    }
-  }
-
   // HELPERS
 
   // updates class variables, not the json file
@@ -216,5 +198,27 @@ export class TodoBot {
     return new Promise((_, reject) =>
       reject(buildCommandStatus(false, errMsg))
     );
+  }
+
+  /**
+   * Attempts to write to json file with new provided json value
+   * @param newTodoJson updated todo json value to write to JSON file
+   * @param successMsg message on success
+   * @param errorMsg message on error
+   * @returns command status typed promise
+   */
+  private _attemptWrite(
+    newTodoJson: TodoList,
+    successMsg: string,
+    errorMsg: string
+  ): Promise<CommandStatus> {
+    return jsonfile
+      .writeFile(this._filePath, newTodoJson)
+      .then(() => {
+        // actually update local todo on success
+        this._updateTodoJson(newTodoJson);
+        return buildCommandStatus(true, successMsg, true);
+      })
+      .catch((error) => buildCommandStatus(false, errorMsg, true, error));
   }
 }
