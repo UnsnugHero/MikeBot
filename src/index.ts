@@ -23,9 +23,9 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   // our switch statement
   const commands: { [key in command] } = {
     // CRUD
-    '!addtodo': () => todoBot.addTodo(msg, args),
-    '!addsection': () => todoBot.addSection(msg, args),
-    '!removesection': () => todoBot.removeSection(msg, args),
+    '!addtodo': () => todoBot.addTodo(args),
+    '!addsection': () => todoBot.addSection(args),
+    '!removesection': () => todoBot.removeSection(args),
     // printing
     '!pinall': () => todoBot.pinAll(msg),
     '!printall': () => todoBot.printAll(msg),
