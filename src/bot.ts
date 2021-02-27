@@ -21,7 +21,7 @@ export class TodoBot {
     this._filePath = filePath;
 
     // i'll leave out case of an empty JSON file, assuming at least {}
-    jsonfile.readFile(filePath, (err, res) => {
+    jsonfile.readFile(filePath, (_, res) => {
       if (res) {
         this._todoJson = res;
       } else {
@@ -34,11 +34,10 @@ export class TodoBot {
   /**
    * Adds a new section to the Todo JSON
    *
-   * @param msg incoming message
    * @param args command arguments
    * @returns promise representing success of command
    */
-  public addSection(msg: Message, args: string[]): Promise<CommandStatus> {
+  public addSection(args: string[]): Promise<CommandStatus> {
     // command must have a section title argument
     if (!args.length) {
       return this._buildCommandRejection(getText('ADD_SECTION_MISSING_TITLE'));
@@ -68,11 +67,10 @@ export class TodoBot {
 
   /**
    * Removes a section by Id
-   * @param msg incoming message
    * @param args command arguments
    * @returns promise representing success of command
    */
-  public removeSection(msg: Message, args: string[]): Promise<CommandStatus> {
+  public removeSection(args: string[]): Promise<CommandStatus> {
     // check if index arg is present
     if (!args.length)
       return this._buildCommandRejection(
@@ -111,11 +109,10 @@ export class TodoBot {
   /**
    * Adds a Todo item to a section or the first section if no section is specified
    *
-   * @param msg incoming message
    * @param args command arguments
    * @returns promise representing success of command
    */
-  public addTodo(msg: Message, args: string[]): Promise<CommandStatus> {
+  public addTodo(args: string[]): Promise<CommandStatus> {
     // need at least section index and content, so at least two arguments
     if (args.length < 2)
       return this._buildCommandRejection(getText('ADD_TODO_INCORRECT_ARGS'));
