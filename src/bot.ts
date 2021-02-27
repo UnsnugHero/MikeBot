@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import jsonfile from 'jsonfile';
 
 import { CommandStatus, Section, TodoList } from './bot.model';
-import { STRINGS } from './strings.constants';
+import { getText } from './strings.constants';
 import {
   buildCommandStatus,
   formatTodoJson,
@@ -40,9 +40,7 @@ export class TodoBot {
   public addSection(msg: Message, args: string[]): Promise<CommandStatus> {
     // command must have a section title argument
     if (!args.length) {
-      return this._buildCommandRejection(
-        'Please specify a title for the section.'
-      );
+      return this._buildCommandRejection(getText('ADD_SECTION_MISSING_TITLE'));
     }
 
     // args will hold the section title, maybe a TODO would be to
@@ -66,13 +64,13 @@ export class TodoBot {
       jsonfile
         .writeFile(this._filePath, newTodoJson)
         .then(() => {
-          const successMsg = `New section ${sectionTitle} successfully added!`;
+          const successMsg = getText('ADD_SECTION_SUCCESS', { sectionTitle });
           return buildCommandStatus(true, successMsg);
         })
         .catch((error) => {
           // revert class todo json
           this._todoJson = this._todoJsonPrevious;
-          return buildCommandStatus(false, 'Error adding new section.', error);
+          return buildCommandStatus(false, getText('ADD_SECTION_ERROR'), error);
         })
         // want to send success message, but don't want it to possibly tip off
         // the catch error which would revert the class todoJson when it shouldn't
@@ -93,21 +91,19 @@ export class TodoBot {
     // check if index arg is present
     if (!args.length)
       return this._buildCommandRejection(
-        'Please specify a section index to delete.'
+        getText('REMOVE_SECTION_MISSING_INDEX')
       );
 
-    const index = parseInt(args[0]);
+    const index = Number(args[0]);
     // check if index can access an array
     if (!isPositiveInteger(index))
       return this._buildCommandRejection(
-        'Please provide a positive integer value.'
+        getText('REMOVE_SECTION_MISSING_POS_INT')
       );
 
     // check index is not out of bounds
     if (index > this._todoJson.sections.length - 1)
-      return this._buildCommandRejection(
-        'Index does not match an existing section.'
-      );
+      return this._buildCommandRejection(getText('REMOVE_SECTION_BAD_INDEX'));
 
     // get section name for message confirmation
     const sectionToRemove = this._todoJson.sections[index].title;
@@ -126,12 +122,18 @@ export class TodoBot {
     return jsonfile
       .writeFile(this._filePath, newTodoJson)
       .then(() => {
-        const successMsg = `Section ${sectionToRemove} successfully removed.`;
+        const successMsg = getText('REMOVE_SECTION_SUCCESS', {
+          sectionToRemove,
+        });
         return buildCommandStatus(true, successMsg);
       })
       .catch((error) => {
         this._todoJson = this._todoJsonPrevious;
-        return buildCommandStatus(false, 'Error removing section.', error);
+        return buildCommandStatus(
+          false,
+          getText('REMOVE_SECTION_ERROR'),
+          error
+        );
       })
       .then((result: CommandStatus) => {
         if (result.success) msg.channel.send(result.description);
@@ -150,9 +152,9 @@ export class TodoBot {
     const formattedTodo = formatTodoJson(this._todoJson);
     return msg.channel
       .send(formattedTodo)
-      .then(() => buildCommandStatus(true, STRINGS['PRINT_ALL_SUCCESS']))
+      .then(() => buildCommandStatus(true, getText('PRINT_ALL_SUCCESS')))
       .catch((error) =>
-        buildCommandStatus(false, STRINGS['PRINT_ALL_ERROR'], error)
+        buildCommandStatus(false, getText('PRINT_ALL_ERROR'), error)
       );
   }
 
@@ -169,15 +171,15 @@ export class TodoBot {
       const sendMsgPromise = msg.channel.send(formattedTodo);
       const pinPromise = sendMsgPromise.then((sentMsg) => sentMsg.pin());
       return Promise.all([sendMsgPromise, pinPromise])
-        .then(() => buildCommandStatus(true, STRINGS['PIN_ALL_SUCCESS']))
+        .then(() => buildCommandStatus(true, getText('PIN_ALL_SUCCESS')))
         .catch((error) => {
-          return buildCommandStatus(false, STRINGS['PIN_ALL_ERROR'], error);
+          return buildCommandStatus(false, getText('PIN_ALL_ERROR'), error);
         });
     }
 
     // missing pin permission
-    return new Promise((resolve, reject) =>
-      reject(buildCommandStatus(false, STRINGS['PIN_ALL_PERMISSION']))
+    return new Promise((_, reject) =>
+      reject(buildCommandStatus(false, getText('PIN_ALL_PERMISSION')))
     );
   }
 

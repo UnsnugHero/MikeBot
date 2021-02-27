@@ -6,9 +6,9 @@ import { CommandStatus, TodoList } from './bot.model';
  *********************/
 
 export const isPositiveInteger = (num: number): boolean => {
-  if (typeof num !== 'number') return false; // assert number
-  if (!Number.isInteger(num)) return false; // assert integer (should be int since did parse int but why not)
-  if (num < 0) return false; // assert positive
+  if (Number.isNaN(num)) return false; // assert number
+  if (!Number.isInteger(num)) return false; // assert integer
+  if (num < 0) return false; // assert positive or 0
   return true;
 };
 
