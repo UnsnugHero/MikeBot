@@ -27,6 +27,10 @@ export const underlineText = (text: string): string => {
   return `__${text}__`;
 };
 
+export const strikethroughText = (text: string): string => {
+  return `~~${text}~~`;
+};
+
 export const buildCommandStatus = (
   success: boolean,
   description: string,

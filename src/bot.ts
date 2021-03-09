@@ -141,20 +141,14 @@ export class TodoBot {
   }
 
   /**
-   * Prints the entire Todo list to the chat. Either ignores arguments passed or says this takes no args,
-   * not sure which one to do yet.
+   * Returns a formatted string representing the todo list
    *
-   * @param msg originating message of command
-   * @returns promise representing success of command
+   * @returns Promise representing string of the todo list
    */
-  public printAll(msg: Message): Promise<CommandStatus> {
-    const formattedTodo = formatTodoJson(this._todoJson);
-    return msg.channel
-      .send(formattedTodo)
-      .then(() => buildCommandStatus(true, getText('PRINT_ALL_SUCCESS')))
-      .catch((error) =>
-        buildCommandStatus(false, getText('PRINT_ALL_ERROR'), error)
-      );
+  public printAll(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      resolve(formatTodoJson(this._todoJson)), reject(null);
+    });
   }
 
   /**

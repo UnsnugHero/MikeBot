@@ -7,6 +7,7 @@ import 'dotenv/config';
 import { COMMANDS, UNSUPPORTED_COMMAND, TODO_FILE_PATH } from './constants';
 import { TodoBot } from './bot';
 import { command, CommandStatus } from './bot.model';
+import { buildCommandStatus } from './helpers';
 
 // discord
 const client = new Discord.Client();
@@ -28,7 +29,21 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
     '!removesection': () => todoBot.removeSection(args),
     // printing
     '!pinall': () => todoBot.pinAll(msg),
-    '!printall': () => todoBot.printAll(msg),
+    '!printall': () =>
+      todoBot
+        .printAll()
+        .then((todoList) => {
+          msg.channel.send(todoList);
+          return buildCommandStatus(true, 'Todo list sent to chat.');
+        })
+        .catch((error) => {
+          return buildCommandStatus(
+            false,
+            'There was an error formatting/posting the todo list.',
+            false,
+            error
+          );
+        }),
   };
 
   if (commands[cmd]) {
@@ -38,8 +53,12 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
     commandFn = () => UNSUPPORTED_COMMAND;
   }
 
+  // TODO: write 2 helper functions:
+  // one for promises that have custom handling fro their promise resolutions
+  // one for promises that have generic promise resolution, like below I guess?
+  // that way don't need the writeAttempt field, just pass through the correct function
   const cmdPromise = commandFn();
-  cmdPromise
+  Promise.resolve(cmdPromise)
     .then((response: CommandStatus) => {
       console.log(response);
       if (response.writeAttempt) msg.channel.send(response.description);
