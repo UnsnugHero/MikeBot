@@ -1,13 +1,8 @@
-import { Message } from 'discord.js';
 import jsonfile from 'jsonfile';
 
 import { CommandStatus, Section, TodoList } from './bot.model';
 import { getText } from './strings.constants';
-import {
-  buildCommandStatus,
-  formatTodoJson,
-  isPositiveInteger,
-} from './helpers';
+import { buildCommandStatus, isPositiveInteger } from './helpers';
 
 export class TodoBot {
   // path of json file to write
@@ -141,39 +136,14 @@ export class TodoBot {
   }
 
   /**
-   * Returns a formatted string representing the todo list
+   * Returns a json todo list
    *
-   * @returns Promise representing string of the todo list
+   * @returns Promise of the todo list
    */
-  public printAll(): Promise<string> {
+  public printAll(): Promise<TodoList> {
     return new Promise((resolve, reject) => {
-      resolve(formatTodoJson(this._todoJson)), reject(null);
+      resolve(this._todoJson), reject(null);
     });
-  }
-
-  /**
-   * Pins the entire todo list to the chat
-   *
-   * @param msg originating message of command
-   * @returns promise representing success of command
-   */
-  public pinAll(msg: Message): Promise<CommandStatus> {
-    // is this how to handle a missing pinnable permission?
-    if (msg.pinnable) {
-      const formattedTodo = formatTodoJson(this._todoJson);
-      const sendMsgPromise = msg.channel.send(formattedTodo);
-      const pinPromise = sendMsgPromise.then((sentMsg) => sentMsg.pin());
-      return Promise.all([sendMsgPromise, pinPromise])
-        .then(() => buildCommandStatus(true, getText('PIN_ALL_SUCCESS')))
-        .catch((error) => {
-          return buildCommandStatus(false, getText('PIN_ALL_ERROR'), error);
-        });
-    }
-
-    // missing pin permission
-    return new Promise((_, reject) =>
-      reject(buildCommandStatus(false, getText('PIN_ALL_PERMISSION')))
-    );
   }
 
   // HELPERS

@@ -6,8 +6,12 @@ import 'dotenv/config';
 // constants/helpers
 import { COMMANDS, UNSUPPORTED_COMMAND, TODO_FILE_PATH } from './constants';
 import { TodoBot } from './bot';
-import { command, CommandStatus } from './bot.model';
-import { buildCommandStatus } from './helpers';
+import { command } from './bot.model';
+import {
+  commandPromiseHandler,
+  pinHandler,
+  printHandler,
+} from './promise-handlers';
 
 // discord
 const client = new Discord.Client();
@@ -24,26 +28,13 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   // our switch statement
   const commands: { [key in command] } = {
     // CRUD
-    '!addtodo': () => todoBot.addTodo(args),
-    '!addsection': () => todoBot.addSection(args),
-    '!removesection': () => todoBot.removeSection(args),
+    '!addtodo': () => commandPromiseHandler(msg, todoBot.addTodo(args)),
+    '!addsection': () => commandPromiseHandler(msg, todoBot.addSection(args)),
+    '!removesection': () =>
+      commandPromiseHandler(msg, todoBot.removeSection(args)),
     // printing
-    '!pinall': () => todoBot.pinAll(msg),
-    '!printall': () =>
-      todoBot
-        .printAll()
-        .then((todoList) => {
-          msg.channel.send(todoList);
-          return buildCommandStatus(true, 'Todo list sent to chat.');
-        })
-        .catch((error) => {
-          return buildCommandStatus(
-            false,
-            'There was an error formatting/posting the todo list.',
-            false,
-            error
-          );
-        }),
+    '!pinall': () => pinHandler(msg, todoBot.printAll()),
+    '!printall': () => printHandler(msg, todoBot.printAll()),
   };
 
   if (commands[cmd]) {
@@ -53,20 +44,7 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
     commandFn = () => UNSUPPORTED_COMMAND;
   }
 
-  // TODO: write 2 helper functions:
-  // one for promises that have custom handling fro their promise resolutions
-  // one for promises that have generic promise resolution, like below I guess?
-  // that way don't need the writeAttempt field, just pass through the correct function
-  const cmdPromise = commandFn();
-  Promise.resolve(cmdPromise)
-    .then((response: CommandStatus) => {
-      console.log(response);
-      if (response.writeAttempt) msg.channel.send(response.description);
-    })
-    .catch((error: CommandStatus) => {
-      console.log(error);
-      msg.channel.send(error.description);
-    });
+  commandFn();
 };
 
 /*******************************
