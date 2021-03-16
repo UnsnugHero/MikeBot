@@ -4,8 +4,8 @@
   "description": "Discord bot for managing a to-do list",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon --watch src/** --exec ts-node src/index.ts",
-    "start:debug": "nodemon --watch src/** --exec node --inspect -r ts-node/register src/index.ts"
+    "start": "nodemon --watch src/** --exec ts-node src/todo-bot.ts",
+    "start:debug": "nodemon --watch src/** --exec node --inspect -r ts-node/register src/todo-bot.ts"
   },
   "author": "",
   "license": "ISC",

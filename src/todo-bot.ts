@@ -5,8 +5,8 @@ import 'dotenv/config';
 
 // constants/helpers
 import { COMMANDS, UNSUPPORTED_COMMAND, TODO_FILE_PATH } from './constants';
-import { TodoBot } from './bot';
-import { command } from './bot.model';
+import { TodoManager } from './todo-manager';
+import { command } from './models/bot.model';
 import {
   commandPromiseHandler,
   pinHandler,
@@ -17,8 +17,8 @@ import {
 const client = new Discord.Client();
 const token = process.env.DISCORD_BOT_TOKEN;
 
-// Todo Bot instance
-const todoBot = new TodoBot(TODO_FILE_PATH);
+// Todo Manager instance
+const todoManager = new TodoManager(TODO_FILE_PATH);
 
 // function map
 const commandRunner = (msg: Message, cmd: command, args: string[]) => {
@@ -28,13 +28,14 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
   // our switch statement
   const commands: { [key in command] } = {
     // CRUD
-    '!addtodo': () => commandPromiseHandler(msg, todoBot.addTodo(args)),
-    '!addsection': () => commandPromiseHandler(msg, todoBot.addSection(args)),
+    '!addtodo': () => commandPromiseHandler(msg, todoManager.addTodo(args)),
+    '!addsection': () =>
+      commandPromiseHandler(msg, todoManager.addSection(args)),
     '!removesection': () =>
-      commandPromiseHandler(msg, todoBot.removeSection(args)),
+      commandPromiseHandler(msg, todoManager.removeSection(args)),
     // printing
-    '!pinall': () => pinHandler(msg, todoBot.printAll()),
-    '!printall': () => printHandler(msg, todoBot.printAll()),
+    '!pinall': () => pinHandler(msg, todoManager.printAll()),
+    '!printall': () => printHandler(msg, todoManager.printAll()),
   };
 
   if (commands[cmd]) {

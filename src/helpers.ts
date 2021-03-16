@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { CommandStatus, TodoList } from './bot.model';
+import { CommandStatus, TodoList } from './models/todo.model';
 
 /**********************
  * Numbers
@@ -34,12 +34,10 @@ export const strikethroughText = (text: string): string => {
 export const buildCommandStatus = (
   success: boolean,
   description: string,
-  writeAttempt = false,
   error?: Message
 ): CommandStatus => {
   return {
     success,
-    writeAttempt,
     description,
     ...(error ? { error } : {}),
   };

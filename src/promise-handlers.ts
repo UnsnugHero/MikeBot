@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { CommandStatus, TodoList } from './bot.model';
+import { CommandStatus, TodoList } from './models/todo.model';
 import { formatTodoJson } from './helpers';
 import { getText } from './strings.constants';
 

@@ -1,10 +1,10 @@
 import jsonfile from 'jsonfile';
 
-import { CommandStatus, Section, TodoList } from './bot.model';
+import { CommandStatus, Section, TodoList } from './models/todo.model';
 import { getText } from './strings.constants';
 import { buildCommandStatus, isPositiveInteger } from './helpers';
 
-export class TodoBot {
+export class TodoManager {
   // path of json file to write
   private _filePath: string;
   // holds the curent value of the todo json
@@ -178,8 +178,8 @@ export class TodoBot {
       .then(() => {
         // actually update local todo on success
         this._updateTodoJson(newTodoJson);
-        return buildCommandStatus(true, successMsg, true);
+        return buildCommandStatus(true, successMsg);
       })
-      .catch((error) => buildCommandStatus(false, errorMsg, true, error));
+      .catch((error) => buildCommandStatus(false, errorMsg, error));
   }
 }

@@ -1,4 +1,4 @@
-# Minecraft To-do Manager Discord Bot
+# To-do Manager Discord Bot
 
 ## Description
 
