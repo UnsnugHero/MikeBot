@@ -1,4 +1,4 @@
-import { command } from './models/todo.model';
+import { command } from './models/bot.model';
 
 // add as I implement
 export const COMMANDS = new Set<command>([

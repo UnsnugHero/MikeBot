@@ -6,7 +6,7 @@ import 'dotenv/config';
 // constants/helpers
 import { COMMANDS, UNSUPPORTED_COMMAND, TODO_FILE_PATH } from './constants';
 import { TodoManager } from './todo-manager';
-import { command } from './models/bot.model';
+import { command } from './models/todo-bot.model';
 import {
   commandPromiseHandler,
   pinHandler,

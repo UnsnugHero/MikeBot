@@ -1,11 +1,11 @@
 {
-  "name": "woah-todo-manager",
+  "name": "mike-bot",
   "version": "1.0.0",
-  "description": "Discord bot for managing a to-do list",
+  "description": "The Mike bot. Fear the mundaneness.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon --watch src/** --exec ts-node src/todo-bot.ts",
-    "start:debug": "nodemon --watch src/** --exec node --inspect -r ts-node/register src/todo-bot.ts"
+    "start": "nodemon --watch src/** --exec ts-node src/index.ts",
+    "start:debug": "nodemon --watch src/** --exec node --inspect -r ts-node/register src/index.ts"
   },
   "author": "",
   "license": "ISC",
