@@ -1,0 +1,105 @@
+const commandPrefix = '!roll';
+
+// client.on('message', (msg) => {
+//   const { content } = msg;
+
+//   if (content.startsWith(commandPrefix)) {
+//     // if badly formatted arguments to terminate
+//     let fail = false;
+//     let failMsg =
+//       'One or more of your arguments was formatted badly. Ask Mike if lost. Ex. #d#';
+
+//     // number for preventing overloads and preventing msg errors
+//     let totalRollNum = 0;
+
+//     // separate each arg into an array
+//     const cmdArgs = content.split(' ');
+
+//     // check for !roll command
+//     if (cmdArgs[0] !== commandPrefix) return;
+
+//     // remove the command entry since it has already been verified
+//     cmdArgs.shift();
+
+//     // ensure there are commands to parse
+//     if (!cmdArgs || cmdArgs.length === 0) return;
+
+//     // variable to hold the result to print
+//     let result = [];
+
+//     // parse command arguments
+//     for (let cmdArg of cmdArgs) {
+//       if (cmdArg.indexOf('d') === -1 || cmdArg.match(/d/g).length > 1) {
+//         fail = true;
+//         break;
+//       }
+
+//       let numRolls = 1;
+//       const splitArgs = cmdArg.split('d');
+
+//       // get number of time to roll this dice
+//       if (splitArgs[0]) {
+//         if (!isPositiveInteger(Number(splitArgs[0]))) {
+//           fail = true;
+//           break;
+//         }
+//         numRolls = Number(splitArgs[0]);
+//         totalRollNum += numRolls;
+//       }
+
+//       if (totalRollNum > 1000) {
+//         fail = true;
+//         failMsg = 'Too many rolls. Calm down.';
+//         break;
+//       }
+
+//       // sides of this dice
+//       const sideNum = Number(splitArgs[1]);
+//       if (!isPositiveInteger(sideNum)) {
+//         fail = true;
+//         break;
+//       }
+
+//       for (i = 0; i < numRolls; ++i) {
+//         const res = handleDiceRoll(sideNum);
+//         result.push(res);
+//       }
+//     }
+
+//     if (fail) {
+//       msg.reply(failMsg);
+//       return;
+//     }
+
+//     // correct grammars
+//     const replyPrefix = result.length > 1 ? 'You rolled' : 'You rolled a';
+
+//     // construct a nicely formatted roll result
+//     let nicelyFormattedResult = '';
+//     result.forEach((rollRes) => {
+//       nicelyFormattedResult += `${rollRes}, `;
+//     });
+
+//     // remove the last two chars
+//     nicelyFormattedResult = nicelyFormattedResult.substring(
+//       0,
+//       nicelyFormattedResult.length - 2
+//     );
+
+//     // reply with result
+//     msg.reply(`${replyPrefix} ${nicelyFormattedResult}`).catch((error) => {
+//       msg.reply(`Something went wrong sending to text chat: ${error.message}`);
+//     });
+//   }
+// });
+
+// const handleDiceRoll = (upperBound) => {
+//   return Math.floor(Math.random() * Math.floor(upperBound) + 1);
+// };
+
+// const isPositiveInteger = (num) => {
+//   if (Number.isNaN(num)) return false; // assert number
+//   if (!Number.isInteger(num)) return false; // assert integer
+//   if (num < 0) return false; // assert positive or 0
+//   return true;
+// };

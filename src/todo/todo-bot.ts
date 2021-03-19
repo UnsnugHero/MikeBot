@@ -47,34 +47,3 @@ const commandRunner = (msg: Message, cmd: command, args: string[]) => {
 
   commandFn();
 };
-
-/*******************************
- * DISCORD
- ******************************/
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
-
-client.on('message', (msg: Message) => {
-  // im assuming content can't be blank or null/undefined ...
-  const { content } = msg;
-
-  // get components of command
-  const cmdWithArgs = content.split(' ');
-
-  // return if null or empty
-  if (!cmdWithArgs || cmdWithArgs.length === 0) return;
-
-  const cmd: command = cmdWithArgs[0] as command;
-  // check for a valid command
-  if (COMMANDS.has(cmd)) {
-    // remove unnecessary first element
-    const args = tail(cmdWithArgs);
-
-    // handle various command cases
-    commandRunner(msg, cmd, args);
-  }
-});
-
-client.login(token);
