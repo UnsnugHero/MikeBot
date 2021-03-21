@@ -13,10 +13,6 @@ import {
   printHandler,
 } from './promise-handlers';
 
-// discord
-const client = new Discord.Client();
-const token = process.env.DISCORD_BOT_TOKEN;
-
 // Todo Manager instance
 const todoManager = new TodoManager(TODO_FILE_PATH);
 
