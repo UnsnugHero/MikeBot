@@ -1,7 +1,8 @@
-import { CommandoClient } from 'discord.js-commando';
+import { Command, CommandoClient } from 'discord.js-commando';
 import path = require('path');
 import 'dotenv/config';
 import { GROUPS } from './groups';
+import { RollCommand } from './dice/dice.commands';
 
 const token = process.env.DISCORD_BOT_TOKEN;
 const ownerId = process.env.DISCORD_OWNER_ID;
@@ -15,10 +16,8 @@ const client = new CommandoClient({
 // the availability of these will be controlled by configs
 client.registry
   .registerDefaultTypes()
-  .registerDefaultGroups()
-  .registerDefaultCommands()
-  .registerGroups(GROUPS(client));
-// .registerCommands();
+  .registerGroups(GROUPS(client))
+  .registerCommands([RollCommand]);
 
 // event listeners
 client.on('ready', () => {
