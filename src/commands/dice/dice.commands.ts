@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
 
+// TODO export all commands in  a command class as an array and the index file can import that and spread it
 export class RollCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {

@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { CommandStatus, TodoList } from './models/todo.model';
-import { formatTodoJson } from './helpers';
+import { formatTodoJson } from './util/todo.helpers';
 import { getText } from './strings.constants';
 
 // This is for handling bot promises that have a description meant

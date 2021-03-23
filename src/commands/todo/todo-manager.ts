@@ -2,7 +2,8 @@ import jsonfile from 'jsonfile';
 
 import { CommandStatus, Section, TodoList } from './models/todo.model';
 import { getText } from './strings.constants';
-import { buildCommandStatus, isPositiveInteger } from './helpers';
+import { isPositiveInteger } from '../../util/helpers';
+import { buildCommandStatus } from './util/todo.helpers';
 
 export class TodoManager {
   // path of json file to write

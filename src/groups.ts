@@ -3,7 +3,7 @@
 import { CommandGroup, CommandoClient } from 'discord.js-commando';
 
 // custom type for command ids. Each type corresponds to a bot module.
-type CommandType = 'dice' | 'dogs' | 'todo';
+type CommandType = 'dice' | 'dogs' | 'todo' | 'help';
 
 interface GroupConfig {
   id: CommandType;
@@ -15,6 +15,7 @@ const groupConfigs: GroupConfig[] = [
   { id: 'dice', name: 'Dice Commands', included: true },
   { id: 'dogs', name: 'Dogs Commands', included: false },
   { id: 'todo', name: 'Todo Commands', included: false },
+  { id: 'help', name: 'Help Commands', included: true },
 ];
 
 const groupMaker = (
