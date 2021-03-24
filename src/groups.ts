@@ -2,11 +2,11 @@
 // Inclusion of a group will be determined by a config boolean
 import { CommandGroup, CommandoClient } from 'discord.js-commando';
 
-// custom type for command ids. Each type corresponds to a bot module.
-type CommandType = 'dice' | 'dogs' | 'todo' | 'help';
+// custom type for command groups
+export type GroupType = 'dice' | 'dogs' | 'todo' | 'help';
 
 interface GroupConfig {
-  id: CommandType;
+  id: GroupType;
   name: string;
   included: boolean;
 }
@@ -20,7 +20,7 @@ const groupConfigs: GroupConfig[] = [
 
 const groupMaker = (
   client: CommandoClient,
-  id: CommandType,
+  id: GroupType,
   name: string
 ): CommandGroup => {
   return new CommandGroup(client, id, name);

@@ -1,6 +1,3 @@
-import { Message } from 'discord.js';
-import { CommandStatus, TodoList } from '../commands/todo/models/todo.model';
-
 /**********************
  * Numbers
  *********************/
@@ -29,4 +26,8 @@ export const underlineText = (text: string): string => {
 
 export const strikethroughText = (text: string): string => {
   return `~~${text}~~`;
+};
+
+export const singleLineCode = (text: string): string => {
+  return `\`${text}\``;
 };

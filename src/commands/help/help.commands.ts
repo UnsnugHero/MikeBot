@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
+import { helpRunner } from './help.runners';
 
 export class HelpCommand extends Command {
   constructor(client: CommandoClient) {
@@ -13,11 +14,6 @@ export class HelpCommand extends Command {
 
   public run(msg: Message): Promise<Message | Array<Message>> {
     const groups = this.client.registry.groups;
-    console.log(
-      groups.forEach((group) => {
-        console.log(group);
-      })
-    );
-    return msg.channel.send('');
+    return msg.channel.send(helpRunner(groups));
   }
 }
