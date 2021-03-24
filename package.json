@@ -1,7 +1,7 @@
 {
   "name": "mike-bot",
   "version": "1.0.0",
-  "description": "The Mike bot. Fear the mundaneness.",
+  "description": "The Mike bot. Fear the mundane.",
   "main": "dist/index.js",
   "scripts": {
     "start": "nodemon --watch src/** --exec ts-node src/index.ts",
