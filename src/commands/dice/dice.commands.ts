@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
+import { rollCommandValidator } from './dice.helpers';
 
 // TODO export all commands in  a command class as an array and the index file can import that and spread it
 export class RollCommand extends Command {
@@ -15,6 +16,7 @@ export class RollCommand extends Command {
           key: 'roll',
           prompt:
             'Provide dice to roll! The argument is #d# where # is some number greater than 0.',
+          validate: rollCommandValidator,
           type: 'string',
         },
       ],

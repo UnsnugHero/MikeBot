@@ -6,7 +6,7 @@ import {
   underlineText,
 } from './helpers';
 
-export class MessageFormatter {
+export class MessageBuilder {
   // this will hold each line of the message and in the end will be joined by newlines
   private _message = [];
 
@@ -44,7 +44,6 @@ export class MessageFormatter {
   public getMessage(): string {
     // using reduce to skip over the newlines
     return this._message.reduce((accum: string, currValue: string) => {
-      console.log(accum);
       if (currValue !== '\n') {
         return accum + currValue + '\n';
       }

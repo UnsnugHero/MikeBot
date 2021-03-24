@@ -3,7 +3,7 @@
 import { Collection } from 'discord.js';
 import { CommandGroup } from 'discord.js-commando';
 import { boldText } from '../../util/helpers';
-import { MessageFormatter } from '../../util/message-formatter';
+import { MessageBuilder } from '../../util/message-builder';
 
 /**************************
  * Help Command Methods
@@ -16,7 +16,7 @@ import { MessageFormatter } from '../../util/message-formatter';
 export const helpRunner = (
   groups: Collection<string, CommandGroup>
 ): string => {
-  const helpMessage = new MessageFormatter();
+  const helpMessage = new MessageBuilder();
 
   helpMessage.addBoldLine(`This is Mike Bot! Fear the mundane.`);
   helpMessage.addNewLine();
