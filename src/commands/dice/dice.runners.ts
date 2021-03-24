@@ -1,27 +1,16 @@
-//     // correct grammars
-//     const replyPrefix = result.length > 1 ? 'You rolled' : 'You rolled a';
+// TODO: support multiple arguments and not have the rollNum argument
+// which would mean to default to 1 roll
+export const rollRunner = (rollText: string): string => {
+  const splitArgs = rollText.split('d');
+  const rollNum = Number(splitArgs[0]);
+  const sideNum = Number(splitArgs[1]);
 
-//     // construct a nicely formatted roll result
-//     let nicelyFormattedResult = '';
-//     result.forEach((rollRes) => {
-//       nicelyFormattedResult += `${rollRes}, `;
-//     });
+  const rollResults: number[] = [];
 
-//     // remove the last two chars
-//     nicelyFormattedResult = nicelyFormattedResult.substring(
-//       0,
-//       nicelyFormattedResult.length - 2
-//     );
+  let i;
+  for (i = 0; i < rollNum; ++i) {
+    rollResults.push(Math.floor(Math.random() * Math.floor(sideNum) + 1));
+  }
 
-//     // reply with result
-//     msg.reply(`${replyPrefix} ${nicelyFormattedResult}`).catch((error) => {
-//       msg.reply(`Something went wrong sending to text chat: ${error.message}`);
-//     });
-//   }
-// });
-
-// const handleDiceRoll = (upperBound) => {
-//   return Math.floor(Math.random() * Math.floor(upperBound) + 1);
-// };
-
-export const rollRunner = () => {};
+  return rollResults.join(' ');
+};

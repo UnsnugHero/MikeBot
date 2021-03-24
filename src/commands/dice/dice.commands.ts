@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
 import { rollCommandValidator } from './dice.helpers';
+import { rollRunner } from './dice.runners';
 
 // TODO export all commands in  a command class as an array and the index file can import that and spread it
 export class RollCommand extends Command {
@@ -25,10 +26,9 @@ export class RollCommand extends Command {
 
   public run(
     msg: Message,
-    args: Record<string, unknown>
+    args: Record<string, string>
   ): Promise<Message | Array<Message>> {
-    console.log(this.client.registry.groups);
     const { roll } = args;
-    return msg.channel.send(roll);
+    return msg.channel.send(rollRunner(roll));
   }
 }
