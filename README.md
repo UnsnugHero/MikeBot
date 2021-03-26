@@ -1,5 +1,5 @@
-# To-do Manager Discord Bot
+# Mike Bot
 
 ## Description
 
-Woah
+Fear the mundane
