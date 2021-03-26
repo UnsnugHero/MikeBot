@@ -6,7 +6,9 @@ import got from 'got';
  */
 export const randomDogRunner = async (): Promise<string> => {
   try {
-    const response = await got('https://api.thedogapi.com/v1/images/search');
+    const response = await got('https://api.thedogapi.com/v1/images/search', {
+      searchParams: { limit: 1, size: 'full' },
+    });
     const { body } = response;
     const parsedBody = JSON.parse(body);
 
