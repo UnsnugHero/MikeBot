@@ -24,11 +24,10 @@ export class RollCommand extends Command {
     });
   }
 
-  public run(
-    msg: Message,
-    args: Record<string, string>
-  ): Promise<Message | Array<Message>> {
+  public run(msg: Message, args: Record<string, string>): Promise<Message> {
     const { roll } = args;
     return msg.channel.send(rollRunner(roll));
   }
 }
+
+export default [RollCommand];

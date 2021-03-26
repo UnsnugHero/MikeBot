@@ -17,3 +17,5 @@ export class HelpCommand extends Command {
     return msg.channel.send(helpRunner(groups));
   }
 }
+
+export default [HelpCommand];

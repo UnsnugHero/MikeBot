@@ -13,7 +13,7 @@ interface GroupConfig {
 
 const groupConfigs: GroupConfig[] = [
   { id: 'dice', name: 'Dice Commands', included: true },
-  { id: 'dogs', name: 'Dogs Commands', included: false },
+  { id: 'dogs', name: 'Dogs Commands', included: true },
   { id: 'todo', name: 'Todo Commands', included: false },
   { id: 'help', name: 'Help Commands', included: true },
 ];
