@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
 import { helpCommandRunner, helpRunner } from './help.runners';
 
@@ -25,7 +25,7 @@ export class Help extends Command {
     const { command } = args;
     const groups = this.client.registry.groups;
 
-    let msgToSend: string;
+    let msgToSend: string | MessageEmbed;
 
     if (command) {
       msgToSend = helpCommandRunner(groups, command);

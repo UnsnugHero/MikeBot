@@ -1,6 +1,6 @@
 // Methods for running a command
 
-import { Collection } from 'discord.js';
+import { Collection, MessageEmbed } from 'discord.js';
 import { CommandGroup } from 'discord.js-commando';
 import { boldText } from '../../util/helpers';
 import { MessageBuilder } from '../../util/message-builder';
@@ -37,23 +37,24 @@ export const helpRunner = (
 
 export function helpCommandRunner(
   groups: Collection<string, CommandGroup>,
-  command
-): string {
+  command: string
+): string | MessageEmbed {
   const availableCommands = groups.flatMap((group) => group.commands);
   const commandToExplain = availableCommands.get(command);
 
   if (!commandToExplain) return 'That command does not exist.';
 
-  let helpMessage = '';
+  const helpMessage = new MessageEmbed();
 
+  helpMessage.setTitle(`!${commandToExplain.name}`);
   if (commandToExplain.description) {
-    helpMessage = `${commandToExplain.description}`;
+    helpMessage.setDescription(commandToExplain.description);
   } else {
-    return 'Sorry, Mike did not explain this one. Yell at him.';
+    return "Sorry, Mike didn't explain this one. Yell at him.";
   }
 
   if (commandToExplain.examples) {
-    helpMessage = `${helpMessage}\nex. ${commandToExplain.examples.join(', ')}`;
+    helpMessage.setFooter(`ex. ${commandToExplain.examples.join(', ')}`);
   }
 
   return helpMessage;
