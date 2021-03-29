@@ -1,21 +1,40 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient } from 'discord.js-commando';
-import { helpRunner } from './help.runners';
+import { helpCommandRunner, helpRunner } from './help.runners';
 
-export class HelpCommand extends Command {
+export class Help extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'help',
       group: 'help',
       memberName: 'help',
       description: 'Shows the commands available with this bot.',
+      args: [
+        {
+          key: 'command',
+          prompt: 'Provid a command to get info about',
+          type: 'string',
+          default: '',
+        },
+      ],
+      argsPromptLimit: 0,
     });
   }
 
-  public run(msg: Message): Promise<Message | Array<Message>> {
+  public run(msg: Message, args: Record<string, string>): Promise<Message> {
+    const { command } = args;
     const groups = this.client.registry.groups;
-    return msg.channel.send(helpRunner(groups));
+
+    let msgToSend: string;
+
+    if (command) {
+      msgToSend = helpCommandRunner(groups, command);
+    } else {
+      msgToSend = helpRunner(groups);
+    }
+
+    return msg.channel.send(msgToSend);
   }
 }
 
-export default [HelpCommand];
+export default [Help];

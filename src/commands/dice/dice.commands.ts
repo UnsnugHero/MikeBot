@@ -21,6 +21,8 @@ export class RollCommand extends Command {
           type: 'string',
         },
       ],
+      // gets rid of annoying type cancel to cancel thing
+      argsPromptLimit: 0,
     });
   }
 
