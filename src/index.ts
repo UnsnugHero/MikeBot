@@ -10,6 +10,7 @@ const ownerId = process.env.DISCORD_OWNER_ID;
 // put ownerId in env variable
 const client = new CommandoClient({
   owner: ownerId,
+  commandPrefix: '~',
 });
 
 // register my commands

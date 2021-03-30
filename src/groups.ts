@@ -3,7 +3,7 @@
 import { CommandGroup, CommandoClient } from 'discord.js-commando';
 
 // custom type for command groups
-export type GroupType = 'dice' | 'animal' | 'todo' | 'help';
+export type GroupType = 'dice' | 'animal' | 'todo' | 'help' | 'compliment';
 
 interface GroupConfig {
   id: GroupType;
@@ -16,6 +16,7 @@ const groupConfigs: GroupConfig[] = [
   { id: 'animal', name: 'Animal Commands', included: true },
   { id: 'todo', name: 'Todo Commands', included: false },
   { id: 'help', name: 'Help Commands', included: true },
+  { id: 'compliment', name: 'Compliment Commands', included: true },
 ];
 
 const groupMaker = (
