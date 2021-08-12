@@ -4,9 +4,9 @@ import { Command, CommandoClient } from 'discord.js-commando';
 export class Compliment extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'talkmeup',
+      name: 'toastme',
       group: 'compliment',
-      memberName: 'talkmeup',
+      memberName: 'toastme',
       description: 'Gives you a compliment',
     });
   }
