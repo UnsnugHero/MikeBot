@@ -12,7 +12,6 @@ export const PUCK_URLS = [
   'https://preview.redd.it/0f6auery2dg71.jpg?width=640&crop=smart&auto=webp&s=894c8f27cee5dbdb73d188aabc8de0c14e0b3027',
   'https://i.redd.it/15xs1durcd771.png',
   'https://pbs.twimg.com/media/EJUIWIIXsAAcefk.jpg',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-TIug5HvFUqMQXEKpF4IlKTtAvA-Y_zKRa-ARaBxnaWjl8Yjk-I3EHuzvVS_mC9KYbYc&usqp=CAU',
   'https://i.redd.it/kkp5bxip02px.png',
   'https://64.media.tumblr.com/8ba689938f6d5bfbfd20bbafc2b3eda4/tumblr_nxhxgdvQIQ1up3cj8o2_r1_540.jpg',
   'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/69a4a03a-d13e-4d92-beb6-6d643e6dfabd/d76dr0r-36ebe22b-dfe0-4848-92ba-d72843f37a85.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzY5YTRhMDNhLWQxM2UtNGQ5Mi1iZWI2LTZkNjQzZTZkZmFiZFwvZDc2ZHIwci0zNmViZTIyYi1kZmUwLTQ4NDgtOTJiYS1kNzI4NDNmMzdhODUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.CxtGX2ViP4rfHPbFRbMxXnNZ2cHSVtwmqABL8djM5bw',
